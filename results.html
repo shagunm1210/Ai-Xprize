@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="css/main.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+  </head>
+  <body>
+    <div class="s130">
+        <form>
+            <div class="inner-form" style="position: fixed; top:100px; max-width: 790px; min-width: 240px; align-content: center;">
+                <div class="input-field first-wrap">
+                    <div class="svg-wrapper">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                      </svg>
+                    </div>
+                    <input id="search" type="text" placeholder="How do you want to save the world?" />
+                </div>
+                <div class="input-field second-wrap">
+                    <button class="btn-search" onclick="getMatches(document.getElementById('search').value); return false;">SEARCH</button>
+                </div>
+            </div>
+            <div class="inner-form" style="max-width: 1200px;">
+                <div class="col-xl">
+                    <div class="">
+                        <h1 id="card-title"></h1>
+                        <p id="card-text"></p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Load data of match and inject the corresponding information from the spreadsheet into the card -->
+    <script type="text/javascript">
+      // Get the matchId from the URL query parameter (?matchId=)
+      const urlParams = new URLSearchParams(window.location.search);
+      const matchId = parseInt(urlParams.get('matchId'));
+
+      var cardCompany = ""
+      var cardCategory = ""
+      var cardMission = ""
+      var cardProduct = ""
+
+      // Get information from the row in the spreasheet that corresponds to matchId
+      $(function(){
+        sheetUrl = 'https://spreadsheets.google.com/feeds/cells/1eYEqq2eKR654wmHEJ4u65KxnlnkRKUNxCx3D4OZ-la4/od6/public/values?alt=json'
+        $.getJSON(sheetUrl, function(data){
+          console.log("Make the data lit")
+        })
+          .done(function(data){
+            try {
+              var entry = data.feed.entry;
+
+              cardCompany = entry[4*matchId].content.$t
+              cardCategory = entry[4*matchId+1].content.$t
+              cardMission = entry[4*matchId+2].content.$t
+              cardProduct = entry[4*matchId+3].content.$t
+
+              // Inject the information retrieved from the spreadsheet into the card
+              $("#card-title").text(cardCompany)
+              $("#card-text").text(cardMission)
+            } catch(err) {
+              // If no match is found display missing text in card
+              console.log(err)
+              $("#card-title").text("Company not found")
+            }
+          })
+      });
+    </script>
+
+    <script src="js/extention/choices.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

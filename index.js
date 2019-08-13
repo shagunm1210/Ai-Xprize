@@ -56,6 +56,7 @@ function getMatches(query) {
   if (index > -1) {
     matchIndexes.splice(index, 1);
   }
-
+for i in matchIndexes:
+  console.log(company[i], category[i], mission[i], product[i]
   window.location = './results.html?matchId='+matchIndexes[0];
 }

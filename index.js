@@ -30,11 +30,11 @@ $(function(){
 
 // Add index of rows within a column that include the query to matchIndexes
 function getColumnMatches(column, query) {
-  for (i = 0; i < column.length; i++){
-    if (column[i].toLowerCase().includes(query)){
-      matchIndexes.push(i)
-    }
+for (i = 0; i < column.length; i++){
+  if (column[i].toLowerCase().indexOf(query) >= 0){
+    matchIndexes.push(i)
   }
+}
 }
 
 // Get matches across all rows and redirect user to the first match
